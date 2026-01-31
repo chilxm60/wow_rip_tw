@@ -1,0 +1,52 @@
+{
+  "items": [
+    {
+      "item_id": 12345,
+      "target_ilvl": 31,
+      "max_price_g": 5000,
+      "note": "Main twink weapon"
+    },
+    {
+      "item_id": 23456,
+      "target_ilvl": 28,
+      "max_price_g": 2500,
+      "note": "Backup / cheaper weapon"
+    },
+    {
+      "item_id": 34567,
+      "target_ilvl": 25,
+      "max_price_g": 1500,
+      "note": "Low level chest piece"
+    },
+    {
+      "item_id": 45678,
+      "target_ilvl": 27,
+      "max_price_g": 2000,
+      "note": "Legs or other armor slot"
+    },
+    {
+      "item_id": 56789,
+      "target_ilvl": 29,
+      "max_price_g": 3000,
+      "note": "Another armor piece"
+    },
+    {
+      "item_id": 67890,
+      "target_ilvl": 32,
+      "max_price_g": 6000,
+      "note": "Ring or trinket"
+    },
+    {
+      "item_id": 78901,
+      "target_ilvl": 30,
+      "max_price_g": 4000,
+      "note": "Generic example with medium budget"
+    },
+    {
+      "item_id": 89012,
+      "target_ilvl": 20,
+      "max_price_g": 1000,
+      "note": "Very low level starter item"
+    }
+  ]
+}
