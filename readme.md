@@ -74,6 +74,8 @@ Open `config.py` and set:
 CLIENT_ID = "your blizzard client id"
 CLIENT_SECRET = "your blizzard client secret"
 ```
+Go to https://develop.battle.net/access/clients and create a client, get the blizzard oauth client and secret ids.
+You will put these values in config.py `WOW_CLIENT_ID` and `WOW_CLIENT_SECRET`.
 
 Region / locale (EU default):
 
@@ -95,6 +97,7 @@ Discord webhook (optional):
 ```python
 DISCORD_WEBHOOK_URL = ""       # or "https://discord.com/api/webhoms/...."
 ```
+ [Setup a discord channel with a webhook url for sending the alert messages](https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks) You will use this for the Discord Alerts.
 
 Desired Items File (normally leave as is):
 
