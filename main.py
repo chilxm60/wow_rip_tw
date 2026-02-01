@@ -66,7 +66,7 @@ def print_banner() -> None:
     line = "=" * 60
     print()
     print(line)
-    print("🎯  WoW Twink Tool - Simple Item Sniper")
+    print("🎯  WoW Twink Helper")
     print(line)
     print()
 

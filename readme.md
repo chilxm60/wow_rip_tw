@@ -1,66 +1,184 @@
-# WoW Twink Item Watcher
+# WoW Twink Helper
 
-Small tool that watches the World of Warcraft Auction House for specific items + item level + max price.
+Small tool that watches the World of Warcraft Auction House for specific items (item id + item level + max price) and prints a line when it finds one.
 
-- Uses Blizzard API (client credentials)
-- Scans all EU connected realms
-- Checks your `desired_items.json`
-- Prints snipes in the terminal
-- Can also send snipes to a Discord channel via webhook 
+Optionally, it can send the same line to a Discord channel via webhook.
 
 ---
 
 ## Requirements
 
+- Windows
 - Python 3.10+ installed
-- A Blizzard API application (client id + client secret) 
-- Discord Webhook optional
-- Git (optional, only if you clone via git)
-- PyCharm (recommended, but not required)
+- Blizzard API application (client id + client secret)
+- Discord webhook (optional)
 
 ---
 
-## How it works (short)
+## 1. Install Python
 
-- `realms.py`  
-  Contains all EU connected realms.  
-  The tool builds a list of unique connected realm IDs (92 realms total).
+1. Download Python: https://www.python.org/downloads/
+2. Run the installer.
+3. Enable **"Add Python to PATH"**.
+4. Finish the installation.
 
-- `desired_items.json`  
-  Your watchlist: each entry has  
-  `item_id`, `target_ilvl`, `max_price_g`, `note`.
+Test in Command Prompt:
 
-- On start:
-  - The tool loads your `desired_items.json`.
-  - It fetches a Blizzard OAuth token using your `CLIENT_ID` / `CLIENT_SECRET`.
-  - It preloads base item levels + bonus data for all watched items (cached).
+```bat
+py --version
+```
 
-- On each scan:
-  - It fetches Auction House data for all connected realms
-  - It uses `MAX_PARALLEL_REALMS` from `config.py` to limit how many realms are scanned in parallel:
-    - default: `MAX_PARALLEL_REALMS = 10` → very relaxed to run it in background without any packet loss
-    - you can set it to `20` if you want faster scans
-  - It skips realms whose auction dump hasn't changed since the last scan
-  - For every auction:
-    - checks if `item_id` is in your watchlist,
-    - resolves the **final item level** (base + bonuses),
-    - compares `final_ilvl` with `target_ilvl` and the price with `max_price_g`.
-  - Every match is printed as a line like:
+If you see `Python 3.x`, you are good.
 
-    ```text
-    [HH:MM:SS] 🔥 SNIPE Argent Dawn | item=31318 | ilvl=31 | price=22000g / max=23000g | auc=... | Singing Crystal Axe 31
-    ```
+---
 
-    and (if configured) the same line is also sent to Discord.
+## 2. Download this tool
 
-- Scan interval:
-  - Controlled by `SCAN_INTERVAL_SECONDS` in `config.py`.
-  - Example:
-    - `3600` → one full scan per hour (very chill)
-    - `1800` → every 30 minutes
-    - `600`  → every 10 minutes
+1. Open: `https://github.com/chilxm60/wow-twink-helper`
+2. Click Code → Download ZIP.
+3. Extract the ZIP to a folder, e.g.:
 
-The idea: it runs quietly in the background with a relaxed scan interval and low concurrency,  
-just checking if your specific twink items (with the correct ilvl hopefully) are up.
+```
+C:\wow-twink-helper
+```
+
+All files (`main.py`, `config.py`, `desired_items.json`, etc.) should be inside this folder.
+
+---
+
+## 3. Create virtualenv and install packages
+
+Open Command Prompt:
+
+```bat
+cd C:\wow-twink-helper
+py -m venv .venv
+.\.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+For future runs you only need:
+
+```bat
+cd C:\wow-twink-helper
+.\.venv\Scripts\activate
+```
+
+---
+
+## 4. Configure `config.py`
+
+Open `config.py` and set:
+
+```python
+CLIENT_ID = "your blizzard client id"
+CLIENT_SECRET = "your blizzard client secret"
+```
+
+Region / locale (EU default):
+
+```python
+REGION = "eu"
+NAMESPACE = "dynamic-eu"
+LOCALE = "en_GB"
+```
+
+Scan interval and parallel realms:
+
+```python
+SCAN_INTERVAL_SECONDS = 3600   # 3600 = one scan per hour
+MAX_PARALLEL_REALMS = 10       # 10 is very relaxed; 20 is faster
+```
+
+Discord webhook (optional):
+
+```python
+DISCORD_WEBHOOK_URL = ""       # or "https://discord.com/api/webhoms/...."
+```
+
+Desired Items File (normally leave as is):
+
+```python
+from pathlib import Path
+DESIRED_ITEMS_FILE = Path("desired_items.json")
+```
+
+Save the file.
+
+---
+
+## 5. Configure `desired_items.json`
+
+Open `desired_items.json`.
+
+Example:
+
+```json
+{
+  "items": [
+    {
+      "item_id": 31318,
+      "target_ilvl": 31,
+      "max_price_g": 23000,
+      "note": "Singing Crystal Axe 31"
+    }
+  ]
+}
+```
+
+More items:
+
+```json
+{
+  "items": [
+    {
+      "item_id": 31318,
+      "target_ilvl": 31,
+      "max_price_g": 23000,
+      "note": "Singing Crystal Axe 31"
+    },
+    {
+      "item_id": 12345,
+      "target_ilvl": 25,
+      "max_price_g": 5000,
+      "note": "Some twink sword"
+    }
+  ]
+}
 
 
+```
+You can also watch multiple item levels of the same item by adding multiple entries with the same item_id but different target_ilvl / max_price_g.
+
+**Fields:**
+- `item_id` – WoW item ID
+- `target_ilvl` – desired item level
+- `max_price_g` – max price in gold (`23000` = 23,000g)
+- `note` – label/comment (shown in log/Discord)
+
+Save the file.
+
+---
+
+## 6. Run the tool
+
+```bat
+cd C:\wow-twink-helper
+.\.venv\Scripts\activate
+py main.py
+```
+
+Example output:
+
+```
+============================================================
+🎯  WoW Twink Helper
+============================================================
+
+[01:11:04] Twink tool started.
+[01:11:04] interval=3600s (~60.0 min) | parallel_realms=10 | total_realms=92
+[01:11:30] 🔥 SNIPE Argent Dawn | item=31318 | ilvl=31 | price=22000g / max=23000g | auc=1821336895 | Singing Crystal Axe 31
+[01:11:32] Next scan in 3600 seconds (~60.0 min)...
+```
+
+If `DISCORD_WEBHOOK_URL` is set, the same SNIPE lines are also sent to Discord.
