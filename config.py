@@ -1,8 +1,8 @@
-
 # config.py
+
 """
 Config for the twink tool. This is the only Python file
-you should ever have to edit (if needed).
+you should ever have to edit.
 """
 
 from pathlib import Path
@@ -11,15 +11,22 @@ from pathlib import Path
 # Blizzard API settings
 # -------------------------------------------------
 
-REGION = "eu"
-LOCALE = "en_GB"
+# REGION = "eu"
+# LOCALE = "en_GB"
+
+# -------- NA ----------
+# REGION = "us"
+# LOCALE = "en_US"
+
+# your Region:
+REGION = "eu"     # or "us"
+LOCALE = "en_GB"  # or "en_US"
+
 NAMESPACE = f"dynamic-{REGION}"
 
 OAUTH_TOKEN_URL = "https://oauth.battle.net/token"
 
 # Put your Blizzard API credentials here.
-# If my friend uses this on his own machine,
-# he has to put his own keys here.
 CLIENT_ID = "PUT_YOUR_CLIENT_ID_HERE"
 CLIENT_SECRET = "PUT_YOUR_CLIENT_SECRET_HERE"
 
@@ -32,7 +39,7 @@ CLIENT_SECRET = "PUT_YOUR_CLIENT_SECRET_HERE"
 SCAN_INTERVAL_SECONDS = 3600
 
 # How many realms to scan in parallel.
-# 10 is very chill for 92 realms.
+# 10 is very chill, 20 is good too.
 MAX_PARALLEL_REALMS = 10
 
 # -------------------------------------------------
